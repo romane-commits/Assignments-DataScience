@@ -8,15 +8,19 @@ def load_data(file_path: str) -> pd.DataFrame:
     """
     # TODO: Implement this function
     pass
-
+#1
+    return pd.read_csv(file_path)
 def clean_age(df: pd.DataFrame) -> pd.DataFrame:
+
     """
     Handle missing values in the 'Age' column by filling them with the median age.
     Should return the modified DataFrame.
     """
     # TODO: Implement this function
     pass
-
+#2
+    df["Age"] = df["Age"].fillna(df["Age"].median())
+    return df
 def convert_types(df:pd.DataFrame) -> pd.DataFrame:
     """
     Convert 'CryoSleep' and 'VIP' columns to boolean types.
@@ -25,7 +29,10 @@ def convert_types(df:pd.DataFrame) -> pd.DataFrame:
     """
     # TODO: Implement this function
     pass
-
+#3
+    df["CryoSleep"] = df["CryoSleep"].fillna(False).astype(bool)
+    df["VIP"] = df["VIP"].fillna(False).astype(bool)
+    return df
 if __name__ == "__main__":
     # This block allows students to test their code locally
     try:
@@ -36,3 +43,4 @@ if __name__ == "__main__":
         print(data.head())
     except Exception as e:
         print(f"Error during execution: {e}")
+
