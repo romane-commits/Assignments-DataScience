@@ -2,42 +2,43 @@ import pandas as pd
 import numpy as np
 
 def calculate_total_spending(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Create a new column 'TotalSpending' by summing up:
-    'RoomService', 'FoodCourt', 'ShoppingMall', 'Spa', and 'VRDeck'.
-    Handle missing values by treating them as 0 before summing.
-    Should return the modified DataFrame.
-    """
-    # TODO: Implement this function
-    pass
+    cols = ['RoomService', 'FoodCourt', 'ShoppingMall', 'Spa', 'VRDeck']
+    
+    df['TotalSpending'] = df[cols].fillna(0).sum(axis=1)
+    
+    return df
 
 def parse_cabin(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    The 'Cabin' column is in the format 'Deck/Num/Side' (e.g., 'B/0/P').
-    Split this into three new columns: 'Deck', 'CabinNum', and 'Side'.
-    If 'Cabin' is NaN, these new columns should also be NaN.
-    'CabinNum' should be converted to numeric (float or int).
-    Should return the modified DataFrame.
-    """
-    # TODO: Implement this function
-    pass
+    cabin_split = df['Cabin'].str.split('/', expand=True)
+    
+    df['Deck'] = cabin_split[0]
+    df['CabinNum'] = pd.to_numeric(cabin_split[1])
+    df['Side'] = cabin_split[2]
+    
+    return df
 
-def filter_outliers_iqr(df: pd.DataFrame, column_name: str) -> pd.Series:
-    """
-    Identify and remove outliers in the specified column using the IQR method.
-    - Calculate Q1 (25th percentile) and Q3 (75th percentile).
-    - Calculate IQR = Q3 - Q1.
-    - Define bounds: Lower = Q1 - 1.5 * IQR, Upper = Q3 + 1.5 * IQR.
-    - Keep only rows where the column value is within [Lower, Upper].
-    Should return a Series containing the filtered column values.
-    """
-    # TODO: Implement this function
-    pass
+
+def filter_outliers_iqr(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
+    q1 = df[column_name].quantile(0.25)
+    q3 = df[column_name].quantile(0.75)
+    
+    iqr = q3 - q1
+    
+    lower = q1 - 1.5 * iqr
+    upper = q3 + 1.5 * iqr
+    
+    mask = (df[column_name] >= lower) & (df[column_name] <= upper)
+
+    return df.loc[mask].copy()
+
 
 if __name__ == "__main__":
+    print("Assignment 2 ready")
+
     # Test your logic here
     try:
         # Assuming assignment_1.py functions are used or mock data is loaded
         print("Assignment 2 template ready for implementation.")
     except Exception as e:
         print(f"Error: {e}")
+
